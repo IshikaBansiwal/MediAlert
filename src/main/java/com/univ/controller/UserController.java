@@ -182,16 +182,7 @@ public class UserController {
         contactRepo.save(c);
         return "redirect:/contacts";
     }
-    @GetMapping("/test-email")
-    @ResponseBody
-    public String testEmail(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) return "Login first!";
-
-        emailService.sendAlert("ishikabansiwal971@gmail.com", 28.7041, 77.1025); // ✅ correct
- // Delhi coordinates
-        return "Test email sent!";
-    }
+    
 
 
 }

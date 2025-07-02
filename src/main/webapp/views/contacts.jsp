@@ -66,20 +66,28 @@
     </form>
 
     <hr>
+<!-- Contact List -->
+<% if (contacts != null && !contacts.isEmpty()) {
+    for (EmergencyContact contact : contacts) {
+%>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title"><%= contact.getName() %></h5>
+            <p class="card-text">
+                <strong>Email:</strong> <%= contact.getEmail() %><br>
+                <strong>Phone:</strong> <%= contact.getPhone() %>
+            </p>
 
-    <!-- Contact List -->
-    <% if (contacts != null && !contacts.isEmpty()) {
-        for (EmergencyContact contact : contacts) {
-    %>
-        <div class="contact-card">
-            <h5><%= contact.getName() %></h5>
-            <p>Email: <%= contact.getEmail() %><br>
-               Phone: <%= contact.getPhone() %></p>
+            <!-- 🗑️ Delete Button -->
+            <form action="/deleteContact" method="post" onsubmit="return confirm('Are you sure you want to delete this contact?')" style="display: inline;">
+                <input type="hidden" name="id" value="<%= contact.getId() %>" />
+                <button type="submit" class="btn btn-danger btn-sm">🗑️ Delete</button>
+            </form>
         </div>
-    <% }} else { %>
-        <p class="text-muted">No emergency contacts added yet.</p>
-    <% } %>
-</div>
+    </div>
+<% }} else { %>
+    <p class="text-muted">No emergency contacts added yet.</p>
+<% } %>
 
 <!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
