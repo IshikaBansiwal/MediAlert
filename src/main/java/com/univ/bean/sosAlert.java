@@ -11,43 +11,72 @@ public class sosAlert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private double latitude;
     private double longitude;
 
-    @Column(columnDefinition = "DATETIME")  // 💥 this prevents `datetime(6)`
+    @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
     public sosAlert() {}
 
-    public sosAlert(Long id, Long userId, double latitude, double longitude, Date timestamp) {
-        this.id = id;
-        this.userId = userId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.timestamp = timestamp;
-    }
+	public sosAlert(Long id, User user, double latitude, double longitude, Date timestamp) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.timestamp = timestamp;
+	}
 
-    // Getters and Setters
+	public Long getId() {
+		return id;
+	}
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+	public User getUser() {
+		return user;
+	}
 
-    public double getLatitude() { return latitude; }
-    public void setLatitude(double latitude) { this.latitude = latitude; }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    public double getLongitude() { return longitude; }
-    public void setLongitude(double longitude) { this.longitude = longitude; }
+	public double getLatitude() {
+		return latitude;
+	}
 
-    public Date getTimestamp() { return timestamp; }
-    public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
 
-    @Override
-    public String toString() {
-        return "sosAlert [id=" + id + ", userId=" + userId + ", latitude=" + latitude + ", longitude=" + longitude
-                + ", timestamp=" + timestamp + "]";
-    }
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
+	public Date getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	@Override
+	public String toString() {
+		return "sosAlert [id=" + id + ", user=" + user + ", latitude=" + latitude + ", longitude=" + longitude
+				+ ", timestamp=" + timestamp + "]";
+	}
+
+   
 }
