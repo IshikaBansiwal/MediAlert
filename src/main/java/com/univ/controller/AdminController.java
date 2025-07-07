@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.univ.bean.Admin;
@@ -67,11 +68,27 @@ public class AdminController {
         req.setAttribute("alerts", sosAlerts);
         return "adminDashboard";
     }
+    @GetMapping("/admin/users")
+    public String viewUsers(Model model) {
+        List<User> users = userRepo.findAll();
+        model.addAttribute("users", users);
+        return "users";
+    }
+    @GetMapping("/admin/soshistory")
+    public String viewSosAlerts(Model model) {
+        List<sosAlert> alerts = sosAlertRepo.findAllByOrderByTimestampDesc();
+        model.addAttribute("alerts", alerts);
+        return "soshistory";
+    }
+
+
 
     @PostMapping("/admin/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
+    public String adminLogout(HttpSession session) {
+        session.removeAttribute("admin"); // ✅ Don't use session.invalidate() here
         return "redirect:/admin/login";
     }
+
+
 }
 

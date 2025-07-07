@@ -1,10 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.univ.bean.User, com.univ.bean.sosAlert" %>
-<%
-    List<User> users = (List<User>) request.getAttribute("users");
-    List<sosAlert> alerts = (List<sosAlert>) request.getAttribute("alerts");
-%>
+<%@ page session="true" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,54 +9,81 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8fafc;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
         }
-        .dashboard {
-            max-width: 900px;
-            margin: 40px auto;
+        .navbar {
+            background-color: #003366;
         }
-        h2, h3 {
-            color: #003366;
+        .navbar .nav-link, .navbar-brand {
+            color: white !important;
         }
-        .section {
-            background-color: #fff;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+        .map-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 30px;
+            border: 2px solid #003366;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="dashboard container">
-        <h2 class="mb-4">👮 Admin Dashboard</h2>
-        <form action="/admin/logout" method="post" class="mb-4">
-            <button class="btn btn-danger">Logout</button>
-        </form>
-
-        <div class="section">
-            <h3>📋 Registered Users</h3>
-            <ul class="list-group mt-3">
-                <% for(User u : users) { %>
-                    <li class="list-group-item">
-                        <b><%= u.getName() %></b> - <%= u.getEmail() %>
-                    </li>
-                <% } %>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h3>🚨 SOS Alerts</h3>
-            <ul class="list-group mt-3">
-                <% for(sosAlert s : alerts) { %>
-                    <li class="list-group-item">
-                        User ID: <%= s.getUserId() %>,
-                        Location: (<%= s.getLatitude() %>, <%= s.getLongitude() %>)
-                    </li>
-                <% } %>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MediAlert Admin</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users">View Registered Users</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/soshistory">SOS Alert History</a>
+                </li>
+                <li class="nav-item">
+                   <form action="${pageContext.request.contextPath}/admin/logout" method="post">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+                   
+                </li>
             </ul>
         </div>
     </div>
+</nav>
+
+<div class="container mt-4">
+    <h2 class="text-center">🚨 Active SOS Alerts Map</h2>
+    <div id="map" class="map-container"></div>
+</div>
+
+<!-- Google Maps JS API (replace `YOUR_API_KEY`) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+<script>
+    const activeAlerts = [
+        // Sample static data (replace with dynamic via AJAX in real use)
+        { lat: 28.7041, lng: 77.1025, name: 'User A', time: '2025-07-05 14:32' },
+        { lat: 19.0760, lng: 72.8777, name: 'User B', time: '2025-07-05 15:15' }
+    ];
+
+    function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 5,
+            center: { lat: 23.2599, lng: 77.4126 } // Center of India
+        });
+
+        activeAlerts.forEach(alert => {
+            new google.maps.Marker({
+                position: { lat: alert.lat, lng: alert.lng },
+                map: map,
+                title: alert.name + ' - ' + alert.time
+            });
+        });
+    }
+
+    window.onload = initMap;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
