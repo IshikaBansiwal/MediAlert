@@ -89,6 +89,7 @@
 <div class="navbar">
     <div class="navbar-left">MediAlert Admin</div>
     <div class="navbar-right">
+     <a  href="/admin/dashboard">Admin Dashboard</a>
         <a href="/admin/users">View Registered Users</a>
         <a href="/admin/soshistory">SOS Alert History</a>
         <form action="/admin/logout" method="post" style="display:inline;">
@@ -111,7 +112,7 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach var="alert" items="${alerts}">
+            <c:forEach var="alert" items="${sosHistory}">
                 <tr>
                     <td>${alert.userId}</td>
                     <td>${alert.latitude}</td>

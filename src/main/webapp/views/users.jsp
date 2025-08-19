@@ -26,6 +26,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Admin Dashboard</a></li>
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/users">View Registered Users</a>
                 </li>

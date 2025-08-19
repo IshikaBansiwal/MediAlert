@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.univ.bean.Admin;
 import com.univ.bean.User;
-import com.univ.bean.sosAlert;
+import com.univ.bean.SosAlert;
 import com.univ.repository.AdminRepository;
 import com.univ.repository.UserRepository;
 import com.univ.repository.sosRepository;
-
+import com.univ.service.SosAlertService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -32,6 +32,8 @@ public class AdminController {
 
     @Autowired
     sosRepository sosAlertRepo;
+    @Autowired
+    SosAlertService sosserv;
 
     @GetMapping("/admin/login")
     public String adminLogin() {
@@ -62,7 +64,7 @@ public class AdminController {
         }
 
         List<User> users = userRepo.findAll();
-        List<sosAlert> sosAlerts = sosAlertRepo.findAll();
+        List<SosAlert> sosAlerts = sosAlertRepo.findAll();
 
         req.setAttribute("users", users);
         req.setAttribute("alerts", sosAlerts);
@@ -74,18 +76,14 @@ public class AdminController {
         model.addAttribute("users", users);
         return "users";
     }
-    @GetMapping("/admin/soshistory")
-    public String viewSosAlerts(Model model) {
-        List<sosAlert> alerts = sosAlertRepo.findAllByOrderByTimestampDesc();
-        model.addAttribute("alerts", alerts);
-        return "soshistory";
-    }
+   
+
 
 
 
     @PostMapping("/admin/logout")
     public String adminLogout(HttpSession session) {
-        session.removeAttribute("admin"); // ✅ Don't use session.invalidate() here
+        session.removeAttribute("admin"); 
         return "redirect:/admin/login";
     }
 

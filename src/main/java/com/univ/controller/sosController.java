@@ -3,15 +3,18 @@ package com.univ.controller;
 
 import com.univ.bean.EmergencyContact;
 import com.univ.bean.User;
-import com.univ.bean.sosAlert;
+import com.univ.bean.SosAlert;
 import com.univ.repository.EmergencyContactRepository;
 import com.univ.repository.sosRepository;
 import com.univ.service.EmailService;
+import com.univ.service.SosAlertService;
+
 
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -39,6 +42,8 @@ public class sosController {
         if (user == null) {
             return "User not logged in!";
         }
+     // Save SOS Alert
+        sosAlertService.saveSosAlert(user, latitude, longitude);
 
         // Fetch user's emergency contacts
         List<EmergencyContact> contacts = contactRepo.findByUserId((long) user.getId());
@@ -70,8 +75,26 @@ public class sosController {
         return "redirect:/contacts";
     }
 
+    @Autowired
+    private SosAlertService sosAlertService;
 
+    @GetMapping("/admin/soshistory")
+    public String showSosHistory(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        List<SosAlert> alerts = sosAlertService.getAlertsByUser(user.getId());
+        model.addAttribute("sosHistory", alerts);
+
+        return "soshistory"; // soshistory.jsp
     }
+
+
+    
+}
+    
 
     
 
